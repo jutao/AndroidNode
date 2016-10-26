@@ -169,15 +169,10 @@
 
 * [Android6.0 新特性详解](http://leanote.com/blog/post/561658f938f41126b2000298?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io)
 
+* [国内一线互联网公司内部面试题库](https://github.com/JackyAndroid/AndroidInterview-Q-A/blob/master/README-CN.md)
 
+* [Android 学习资料收集](https://github.com/Freelander/Android_Data)
 
+* [Android 学习笔记](https://github.com/GeniusVJR/LearningNotes)
 
-
-
-
-
-
-
-
-
-
+* [编程学习笔记](https://github.com/CharonChui/AndroidNote)
