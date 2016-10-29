@@ -34,7 +34,7 @@
 	
 	*评论 29,85,96*
 
-	*序列化： [Serializable与Parcelable传递对象详解(activity间传递对象方式)](http://blog.csdn.net/hudan2714/article/details/7856130)*
+ * 序列化 [Serializable与Parcelable传递对象详解(activity间传递对象方式)](http://blog.csdn.net/hudan2714/article/details/7856130)*
 
 * [Intent匹配规则以及解析框架深入分析](http://blog.csdn.net/qinjuning/article/details/7384906)
 
