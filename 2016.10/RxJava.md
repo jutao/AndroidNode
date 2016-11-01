@@ -4,6 +4,7 @@ github地址：
 [RxJava](https://github.com/ReactiveX/RxJava) 
 
 [RxAndroid](https://github.com/ReactiveX/RxAndroid )
+
 引入依赖：
 
   compile 'io.reactivex:rxjava:1.2.1'
@@ -214,6 +215,76 @@ RxJava的基本流程就如上面的代码所示，创建出 Observable 和 Subs
 
 ![高圆圆](http://i.imgur.com/qrD38Xf.png)
 
-# 线程控制 Scheduler#
-在 RxJava 的默认规则中，事件的发出和消费都是在同一个线程的。也就是说，我们刚才实现出来的只是一个同步的观察者模式。观察者模式本身的目的就是『后台处理，前台回调』的异步机制，因此异步对于 RxJava 是至关重要的。而要实现异步，则需要用到 RxJava 的另一个概念： Scheduler（调度器） 。
+# 线程控制 Scheduler (一)#
+在 RxJava 的默认规则中，事件的发出和消费都是在同一个线程的。也就是说，我们刚才实现出来的只是一个同步的观察者模式。观察者模式本身的目的就是『后台处理，前台回调』的异步机制，因此异步对于 RxJava 是至关重要的。而要实现异步，则需要用到 RxJava 的另一个概念： Scheduler（调度器）。
+## Scheduler 的 API (一) ##
+在RxJava 中，Scheduler ——调度器，相当于线程控制器，RxJava 通过它来指定每一段代码应该运行在什么样的线程。RxJava 已经内置了几个 Scheduler ，它们已经适合大多数的使用场景：
+       
+            //直接在当前线程运行，相当于不指定线程，这是默认的 Schedulers
+            subscribeOn(Schedulers.immediate())
+        
+            //启用新线程，并在新线程中执行操作
+            subscribeOn(Schedulers.newThread())
+        
+        /**
+         *  I/O 操作（读写文件、读写数据库、网络信息交互等）所使用的 Scheduler。
+         *  行为模式和 newThread() 差不多，区别在于 io() 的内部实现是是用一个
+         *  无数量上限的线程池，可以重用空闲的线程，因此多数情况下 io() 比 newThread()
+         *  更有效率。不要把计算工作放在 io() 中，可以避免创建不必要的线程。
+         */
+            subscribeOn(Schedulers.io())
+        
+        /**
+         * 计算所使用的 Scheduler。这个计算指的是 CPU 密集型计算，即不会被 I/O
+         * 等操作限制性能的操作，例如图形的计算。这个 Scheduler 使用的固定的线程池，
+         * 大小为 CPU 核数。不要把 I/O 操作放在 computation() 中，否则 I/O 操作
+         * 的等待时间会浪费 CPU
+         */
+            subscribeOn(Schedulers.computation())
+        
+            //指定的操作将在 Android 主线程运行
+            subscribeOn(AndroidSchedulers.mainThread())
+        
+            //当其他排队任务完成后，当前线程排队开始执行
+            subscribeOn(Schedulers.trampoline());
+
+有了这几个 Scheduler ，就可以使用 subscribeOn() 和 observeOn() 两个方法来对线程进行控制了。 * subscribeOn(): 指定 subscribe() 所发生的线程，即 Observable.OnSubscribe 被激活时所处的线程。或者叫做事件产生的线程。 * observeOn(): 指定 Subscriber 所运行在的线程。或者叫做事件消费的线程。
+
+	    Observable.just(1, 2, 3, 4).
+        subscribeOn(Schedulers.io()).
+        observeOn(AndroidSchedulers.mainThread()).
+        subscribe(new Action1<Integer>() {
+          @Override public void call(Integer number) {
+            System.out.println("number:" + number);
+          }
+        });
+
+上面这段代码中，由于 subscribeOn(Schedulers.io()) 的指定，被创建的事件的内容 1、2、3、4 将会在 IO 线程发出；而由于 observeOn(AndroidScheculers.mainThread()) 的指定，因此 subscriber 数字的打印将发生在主线程 。事实上，这种在 subscribe() 之前写上两句 subscribeOn(Scheduler.io()) 和 observeOn(AndroidSchedulers.mainThread()) 的使用方式非常常见，它适用于多数的 『后台线程取数据，主线程显示』的程序策略。
+
+这个时候我们再去写刚才写过的加载图片案例可以这么写：
+
+    Observable.create(new Observable.OnSubscribe<Drawable>() {
+
+      @Override public void call(Subscriber<? super Drawable> subscriber) {
+        Drawable drawable=ContextCompat.getDrawable(MainActivity.this,R.mipmap.gyy);
+        subscriber.onNext(drawable);
+        subscriber.onCompleted();
+      }
+    }).subscribeOn(Schedulers.io())//加载图片操作将在IO线程执行
+        .observeOn(AndroidSchedulers.mainThread())//设置图片操作将在主线程执行
+        .subscribe(new Subscriber<Drawable>() {
+          @Override public void onCompleted() {
+
+          }
+
+          @Override public void onError(Throwable e) {
+			Toast.makeText(MainActivity.this, "加载图片出错!!"+e.getMessage(), Toast.LENGTH_SHORT).show();
+          }
+
+          @Override public void onNext(Drawable drawable) {
+            mImageview.setImageDrawable(drawable);
+          }
+        });
+
+此时，加载图片将会发生在 IO 线程，而设置图片则被设定在了主线程。这就意味着，即使加载图片耗费了几十甚至几百毫秒的时间，也不会造成丝毫界面的卡顿。
 
