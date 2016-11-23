@@ -288,3 +288,29 @@ RxJava的基本流程就如上面的代码所示，创建出 Observable 和 Subs
 
 此时，加载图片将会发生在 IO 线程，而设置图片则被设定在了主线程。这就意味着，即使加载图片耗费了几十甚至几百毫秒的时间，也不会造成丝毫界面的卡顿。
 
+线程切换的用法暂时先介绍到这里。
+
+# 变换 #
+RxJava 提供了对事件序列进行变换的支持，这是它的核心功能之一，也是大多数人说『RxJava 真是太好用了』的最大原因。
+
+## map ##
+    /**
+     * 比如被观察者产生的事件中只有图片文件路径；,但是在观察者这里只想要bitmap,那么就需要类型变换。
+     */
+    Observable.just(R.mipmap.gyy)
+        .observeOn(Schedulers.io())
+        .map(new Func1<Integer, Bitmap>() {
+          @Override public Bitmap call(Integer res) {
+            return BitmapFactory.decodeResource(getResources(), res);
+          }
+        })
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Bitmap>() {
+          @Override public void call(Bitmap bitmap) {
+            mImageview.setImageBitmap(bitmap);
+          }
+        });
+由上面的代码可以看到，使用操作符将事件处理逐步分解，通过线程调度为每一步设置不同的线程环境，完全解决了你线程切换的烦恼。可以说线程调度+操作符，才真正展现了RxJava无与伦比的魅力。
+
+## flatMap ##
+未完待续...
