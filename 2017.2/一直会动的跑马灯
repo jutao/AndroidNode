@@ -1,0 +1,54 @@
+
+	/**
+	 * 一直会动的跑马灯
+	 * @author TIAN
+	 */
+	public class FocuseTextView extends TextView {
+
+		public FocuseTextView(Context context, AttributeSet attrs, int defStyle) {
+			super(context, attrs, defStyle);
+			initView(context);
+		}
+
+		public FocuseTextView(Context context, AttributeSet attrs) {
+			super(context, attrs);
+			initView(context);
+		}
+
+		public FocuseTextView(Context context) {
+			super(context);
+			initView(context);
+		}
+
+		private void initView(Context context) {
+			// android:ellipsize="marquee"
+			// android:focusable="true"
+			// android:focusableInTouchMode="true"
+			// android:marqueeRepeatLimit="marquee_forever"
+			// android:singleLine="true"
+			setEllipsize(TruncateAt.MARQUEE);
+			setFocusable(true);
+			setFocusableInTouchMode(true);
+			setMarqueeRepeatLimit(-1);
+			setSingleLine(true);
+		}
+
+		@Override
+		@ExportedProperty(category = "focus")
+		public boolean isFocused() {
+			return true;
+		}
+
+		@Override
+		protected void onFocusChanged(boolean focused, int direction,
+				Rect previouslyFocusedRect) {
+			if (focused)
+				super.onFocusChanged(focused, direction, previouslyFocusedRect);
+		}
+
+		@Override
+		public void onWindowFocusChanged(boolean hasWindowFocus) {
+			if (hasWindowFocus)
+				super.onWindowFocusChanged(hasWindowFocus);
+		}
+	}
