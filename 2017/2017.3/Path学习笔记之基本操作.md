@@ -51,7 +51,6 @@
 观察可知 close 的效果为用线段连接起始点和终点，除非起始点等于终点。
 
 # 基本形状
-## addXxx,arcTo
 
 方法一览：
 
@@ -88,7 +87,7 @@
     public void addPath (Path src, float dx, float dy)
     public void addPath (Path src, Matrix matrix)
 
-### addRect（矩形）
+## addRect（矩形）
 
     mPath.addRect(50,50,150,150,Direction.CW);
 
@@ -115,7 +114,7 @@
 
 而矩形的另外一种画法 public void addRect(RectF rect, Direction dir) 和上面的方法其实一样，只是把坐标封装到了 RectF 对象中而已。
 
-### addCircle（圆形）
+## addCircle（圆形）
 
     mPath.addCircle(210,210,200, Path.Direction.CW);
 
@@ -140,7 +139,7 @@
 ![image.png](http://upload-images.jianshu.io/upload_images/3054656-b24fe1e1da6d757f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### addRoundRect（圆角矩形）
+## addRoundRect（圆角矩形）
 
 圆角矩形主要有两种画法，一种是圆角弧度统一，第二种是定制每一个圆角的弧度。用法如下
 
@@ -164,7 +163,7 @@
 
 ![圆角半径](http://upload-images.jianshu.io/upload_images/3054656-571ad0c63463d64d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-### addOval（椭圆）
+## addOval（椭圆）
 
     RectF rect = new RectF(100, 100, 800, 500);
     mPath = new Path();
@@ -179,7 +178,7 @@
 ![椭圆](http://upload-images.jianshu.io/upload_images/3054656-8305a07ea17626a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### addArc与arcTo（圆弧）
+## addArc与arcTo（圆弧）
 
     RectF rect = new RectF(100, 100, 800, 500);
     //开始的角度
@@ -196,3 +195,160 @@
 关于起始角度以及扫过的角度这些是怎么来的，我理解的是实际上我们是在指定矩形内画一个内切椭圆，通过指定角度在这个椭圆上截取一部分，这一部分就是我们所画的弧。示意图如下，不要嫌丑：
 
 ![弧](http://upload-images.jianshu.io/upload_images/3054656-2f1bf4d694f95e7e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+知道了addArc的用法之后，我们来看一下arcTo这个方法，这个方法也是用来画圆弧的，但是与addArc有些不同:
+- addArc	直接添加一段圆弧
+- arcTo	  添加一段圆弧，如果圆弧的起点与上一次Path操作的终点不一样的话，就会在这两个点连成一条直线
+
+      RectF rect = new RectF(100, 100, 800, 500);
+      //开始的角度
+      float startAngle=90;
+      //扫过的角度
+      float sweepAngle=180;
+      mPath = new Path();
+      mPath.lineTo(100,100);
+      mPath.arcTo(rect,startAngle,sweepAngle);
+
+效果如下：
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-785a72beeca6dac4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+可以看到，圆弧的起点并不是直线的终点，于是他们连接在了一起。如果你不想让他们连接怎么办？
+
+    mPath.arcTo(rect,startAngle,sweepAngle,true);
+
+arcTo 最后一个属性填 true 就可以了。效果如下：
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-255b070700818d89.png)
+
+## addPath（添加Path）
+
+先看最普通的 public void addPath (Path src)
+
+    Path circle=new Path();
+    RectF rect = new RectF(100, 100, 800, 500);
+    mPath = new Path();
+    mPath.addRect(rect, Path.Direction.CW);
+    circle.addCircle(450,300,200, Path.Direction.CW);
+    mPath.addPath(circle);
+
+它将两个path合并在了一起，效果如下：
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-2d0a81593436197c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+addPath的第二个方法的 dx 和 dy 两个参数是什么意思呢？
+
+    mPath.addPath(circle,350,-100);
+
+其实它们是代表添加path后的位移值
+
+效果如下：
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-4d28b8f8a6b14b86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+# 设置方法
+## set()
+    Path circle=new Path();
+    RectF rect = new RectF(100, 100, 800, 500);
+    mPath = new Path();
+    mPath.addRect(rect, Path.Direction.CW);
+    circle.addCircle(450,300,200, Path.Direction.CW);
+    mPath.set(circle);
+
+这个方法就是将path之前的矩形变成圆形。
+
+效果如下：
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-546c79bf325f031e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+## offset()
+    RectF rect = new RectF(100, 100, 800, 500);
+    mPath = new Path();
+    mPath.addRect(rect, Path.Direction.CW);
+    mPath.offset(150,150);
+
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-55ae6162b44b82ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+它的作用就是将path进行平移
+
+offset() 还有一个参数 dst 是起什么作用呢？
+
+    mPath=new Path();
+    mPath.addCircle(50,50,200, Path.Direction.CW);
+    Path temp=new Path();
+    RectF rect = new RectF(100, 100, 800, 500);
+    temp.addRect(rect, Path.Direction.CW);
+    //相当于用set方法将 temp set 给了mPath，覆盖 mPath 原有的图案
+    temp.offset(150,150,mPath);
+
+效果如下：
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-55ae6162b44b82ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+可以看到 mPath 之前画的圆已经被覆盖
+
+## reset()
+这个方法很简单，就是将path的所有操作都清空掉。
+
+# 判断方法
+## isConvex()（这个方法在API21之后才有）
+
+判断path是否为凸多边形，如果是就为true，反之为false。
+
+要理解这个方法首先，我们要知道什么是凸多边形。
+
+凸多边形的概念:
+
+1. 每个内角小于180度
+2. 任何两个顶点间的线段位于多边形的内部或边界上。
+
+也就是说矩形，三角形，直线都是凸多边形，但是五角星那种形状就不是。现在我们用代码验证一下：
+
+    mPath=new Path();
+    mPath.moveTo(100,100);
+    mPath.lineTo(200,200);
+    mPath.lineTo(100,400);
+    mPath.lineTo(300,50);
+    mPath.close();
+    System.out.println(mPath.isConvex());
+
+效果如下：
+
+![image.png](http://upload-images.jianshu.io/upload_images/3054656-b99b4c9a0f651743.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+很明显，这不是一个凸多边形，查看输出：
+
+    I/System.out: false
+
+## isEmpty
+这个方法依然很简单，就是判断 path 中是否包含内容
+
+    mPath=new Path();
+    System.out.println(mPath.isEmpty());
+    mPath.lineTo(300,50);
+    System.out.println(mPath.isEmpty());
+
+查看输出：
+
+    I/System.out: true
+    I/System.out: false
+
+##  isRect
+    mPath=new Path();
+    RectF rect=new RectF();
+    mPath.addRect(100,100,50,50,Path.Direction.CW);
+    System.out.println(mPath.isRect(rect));
+    System.out.println(rect);
+
+  判断path是否是一个矩形，如果是一个矩形的话，将矩形的信息存到参数rect中。
+
+  输出如下：
+
+     I/System.out: true
+     I/System.out: RectF(50.0, 50.0, 100.0, 100.0)
