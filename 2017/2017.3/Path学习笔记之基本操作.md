@@ -342,3 +342,8 @@ offset() 还有一个参数 dst 是起什么作用呢？
 
      I/System.out: true
      I/System.out: RectF(50.0, 50.0, 100.0, 100.0)
+
+# 最佳实践
+如果想练习一下 Path知识，可以看一下下面的 blog：
+
+[Path实战之雷达图](https://github.com/jutao/AndroidNode/blob/master/2017/2017.3/Path%E5%AE%9E%E6%88%98%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%9B%BE.md)

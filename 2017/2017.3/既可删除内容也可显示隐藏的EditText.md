@@ -1,4 +1,4 @@
-#Java文件（依赖于 PasswordEditText）
+# Java文件（依赖于 PasswordEditText）
 
 
 [PasswordEditText链接](https://github.com/jutao/AndroidNode/blob/master/2017/2017.3/%E5%AF%86%E7%A0%81%E6%98%BE%E7%A4%BA%E4%B8%8E%E9%9A%90%E8%97%8FEditText.md)

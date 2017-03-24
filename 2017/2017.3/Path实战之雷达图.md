@@ -206,7 +206,12 @@
 
 ![多边形效果.gif](http://upload-images.jianshu.io/upload_images/3054656-50a0b0225608fc7b.gif?imageMogr2/auto-orient/strip)
 
-终于完成了,全部代码在下面
+# 总结
+终于完成了,全部代码在下面：
+
+[Android雷达图全部代码 ](https://github.com/jutao/AndroidNode/blob/master/2017/2017.3/%E9%9B%B7%E8%BE%BE%E5%9B%BE%E5%85%A8%E9%83%A8%E4%BB%A3%E7%A0%81.md)
+
+主要是参考 crazy__chen 大神的博客，链接贴在下面，做了一遍其实还蛮简单的，这个控件还有很多不完善的，如果实际使用需要改善的地方还有很多，如果有不足希望大家可以告诉我，谢谢！！
 
 参考资料
 
