@@ -1,3 +1,29 @@
+# path 常用方法一览
+> 为了兼容性(_偷懒_) 本表格中去除了部分API21(即安卓版本5.0)以上才添加的方法。
+
+| 作用          | 相关方法                                     | 备注                                       |
+| ----------- | ---------------------------------------- | ---------------------------------------- |
+| 移动起点        | moveTo                                   | 移动下一次操作的起点位置                             |
+| 设置终点        | setLastPoint                             | 重置当前path中最后一个点位置，如果在绘制之前调用，效果和moveTo相同   |
+| 连接直线        | lineTo                                   | 添加上一个点到当前点之间的直线到Path                     |
+| 闭合路径        | close                                    | 连接第一个点连接到最后一个点，形成一个闭合区域                  |
+| 添加内容        | addRect, addRoundRect,  addOval, addCircle, 	addPath, addArc, arcTo | 添加(矩形， 圆角矩形， 椭圆， 圆， 路径， 圆弧) 到当前Path (注意addArc和arcTo的区别) |
+| 是否为空        | isEmpty                                  | 判断Path是否为空                               |
+| 是否为矩形       | isRect                                   | 判断path是否是一个矩形                            |
+| 替换路径        | set                                      | 用新的路径替换到当前路径所有内容                         |
+| 偏移路径        | offset                                   | 对当前路径之前的操作进行偏移(不会影响之后的操作)                |
+| 贝塞尔曲线       | quadTo, cubicTo                          | 分别为二次和三次贝塞尔曲线的方法                         |
+| rXxx方法      | rMoveTo, rLineTo, rQuadTo, rCubicTo      | **不带r的方法是基于原点的坐标系(偏移量)， rXxx方法是基于当前点坐标系(偏移量)** |
+| 填充模式        | setFillType, getFillType, isInverseFillType, toggleInverseFillType | 设置,获取,判断和切换填充模式                          |
+| 提示方法        | incReserve                               | 提示Path还有多少个点等待加入**(这个方法貌似会让Path优化存储结构)** |
+| 布尔操作(API19) | op                                       | 对两个Path进行布尔运算(即取交集、并集等操作)                |
+| 计算边界        | computeBounds                            | 计算Path的边界                                |
+| 重置路径        | reset, rewind                            | 清除Path中的内容<br/> **reset不保留内部数据结构，但会保留FillType.**<br/> **rewind会保留内部的数据结构，但不保留FillType** |
+| 矩阵操作        | transform                                | 矩阵变换                                     |
+
+# Path含义
+Path封装了由直线和曲线(二次，三次贝塞尔曲线)构成的几何路径。你能用Canvas中的drawPath来把这条路径画出来(同样支持Paint的不同绘制模式)，也可以用于剪裁画布和根据路径绘制文字。我们有时会用Path来描述一个图像的轮廓，所以也会称为轮廓线(轮廓线仅是Path的一种使用方法，两者并不等价)
+
 # 直线与点的操作
 ## lineTo
     //创建一条从原点到坐标(300,300)的直线
@@ -51,42 +77,6 @@
 观察可知 close 的效果为用线段连接起始点和终点，除非起始点等于终点。
 
 # 基本形状
-
-方法一览：
-
-    //矩形
-    public void addRect(RectF rect, Direction dir)
-
-    public void addRect(float left, float top, float right, float bottom, Direction dir)
-
-    //圆形
-    public void addCircle(float x, float y, float radius, Direction dir)
-
-
-    //圆角矩形
-    public void addRoundRect(RectF rect, float[] radii, Direction dir)
-
-    public void addRoundRect (float left,float top,float right,float bottom,float rx,float ry,Path.Direction dir)
-
-    public void addRoundRect (RectF rect,float[] radii,Path.Direction dir)
-
-    public void addRoundRect (float left,float top,float right,float bottom,float[] radii,Path.Direction dir)
-
-    //椭圆
-    public void addOval(RectF oval, Direction dir)
-
-    public void addOval (float left,float top,float right,float bottom,Path.Direction dir)
-
-    //圆弧
-    public void addArc (RectF oval, float startAngle, float sweepAngle)
-    public void arcTo (RectF oval, float startAngle, float sweepAngle)
-    public void arcTo (RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo)
-
-    // 添加Path
-    public void addPath (Path src)
-    public void addPath (Path src, float dx, float dy)
-    public void addPath (Path src, Matrix matrix)
-
 ## addRect（矩形）
 
     mPath.addRect(50,50,150,150,Direction.CW);
