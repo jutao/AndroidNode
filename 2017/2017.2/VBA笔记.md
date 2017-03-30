@@ -11,7 +11,7 @@
 	       MsgBox "A1单元格已经输入了内容！"
 	  End If
 
-###运行效果如下
+### 运行效果如下
 
 单元格没有内容：
 
@@ -21,7 +21,7 @@
 
 ![单元格有内容](http://i.imgur.com/qRcxx1J.png)
 
-## if—then—elseif语句 
+## if—then—elseif语句
 要判断A1单元格的数是否能被2、3、5其中之一整除，设计程序：
 
         If [a1] = "" Then
@@ -47,12 +47,12 @@ Go to 语句是将程序转到指定的标签的语句位置，然后继续往�
 	x: '为go to 语句设置的标签，必须以英文状态下的冒号结尾
 	 lSum=lSum+i
 	 i=i+1
-	If i<=100 
+	If i<=100
 		Then Goto x '如果i<=100,则程序跳到标签X处
 	MsgBox "1到100的自然数和为"&lSum
 
 运行结果：
-	
+
 ![1到100相加结果](http://i.imgur.com/ERGBim2.png)
 
 # 快捷键 #
@@ -83,7 +83,7 @@ CRTL+G  ：打开立即窗口
 输出当前表格第一个工作簿的名称：
 
 	Msgbox Worksheets(1).name
-	
+
 输出当前表格名为 Sheet1 的工作簿的名称
 
 	Msgbox Worksheets("Sheet1").name

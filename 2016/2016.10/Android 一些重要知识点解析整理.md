@@ -1,4 +1,4 @@
-##Android中的异步任务机制
+##  Android中的异步任务机制
 
 * [Android中AsyncTak的使用与源码分析](http://blog.csdn.net/bboyfeiyu/article/details/8973058)
 
@@ -12,7 +12,7 @@
 
 
 
-##Android Activity
+##  Android Activity
 
 * [developer 官网](http://developer.android.com/guide/topics/manifest/activity-element.html#lmode) (强烈推荐 dev guide)
 
@@ -28,10 +28,10 @@
 
 
 
-##Android Intent
+## Android Intent
 
 * [Android中Intent传递对象的两种方法(Serializable,Parcelable)](http://blog.csdn.net/android_tutor/article/details/5740845)
-	
+
 	*评论 29,85,96*
 
  * 序列化 [Serializable与Parcelable传递对象详解(activity间传递对象方式)](http://blog.csdn.net/hudan2714/article/details/7856130)*
@@ -44,7 +44,7 @@
 
 
 
-##Android线程间通信
+## Android线程间通信
 
 * [Android并发编程-线程间通信的三种基本方式](http://blog.csdn.net/manoel/article/details/38964563)
 
@@ -60,7 +60,7 @@
 
 
 
-##Android UI 及布局
+## Android UI 及布局
 
 * [Android 中的像素单位](http://www.cnblogs.com/bluestorm/archive/2012/10/04/2711508.html)
 
@@ -76,7 +76,7 @@
 
 
 
-##Android 网络访问
+## Android 网络访问
 
 * [Android Volley 完全解析系列](http://blog.csdn.net/guolin_blog/article/details/17482095)
 
@@ -87,19 +87,19 @@
 * [Volley是否支持https](http://www.jiangwenrou.com/volley%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81https.html)
 
 
-##OOM 问题
+## OOM 问题
 
 * [Android 高效加载大图、多图解决方案，有效避免程序 OOM](http://blog.csdn.net/guolin_blog/article/details/9316683)
 
 
 
-##ANR 问题
+## ANR 问题
 
 * [什么是 ANR ? 如何避免它？](http://blog.csdn.net/Zengyangtech/article/details/6025671)
 
 
 
-##Android 事件分发机制
+## Android 事件分发机制
 
 * [Android 中的事件处理](http://blog.csdn.net/dawanganban/article/details/19285977)
 
@@ -115,7 +115,7 @@
 
 
 
-##Android 进程间通信
+## Android 进程间通信
 
 * [Android aidl Binder框架浅析](http://blog.csdn.net/lmj623565791/article/details/38461079)
 
@@ -129,7 +129,7 @@
 
 
 
-##Android底层及Linux
+## Android底层及Linux
 
 * [Android系统开发-linux进程基本概念](http://blog.csdn.net/dawanganban/article/details/38854817)
 
@@ -141,13 +141,13 @@
 
 
 
-##Android 数据存储与数据解析
+## Android 数据存储与数据解析
 
 * [android解析XML总结（SAX、Pull、Dom三种方式）](http://www.cnblogs.com/JerryWang1991/archive/2012/02/24/2365507.html)
 
 
 
-##Android 架构与设计模式
+## Android 架构与设计模式
 
 * [一种在android中实现MVP模式的新思路](https://github.com/bboyfeiyu/android-tech-frontier/tree/master/androidweekly/%E4%B8%80%E7%A7%8D%E5%9C%A8android%E4%B8%AD%E5%AE%9E%E7%8E%B0MVP%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF)
 
@@ -155,8 +155,8 @@
 
 
 
-##其他
-	
+## 其他
+
 * [一个经典例子让你彻彻底底理解java回调机制](http://blog.csdn.net/xiaanming/article/details/8703708)
 
 * [Java 并发面试题](http://blog.csdn.net/geolo/article/details/8670900)

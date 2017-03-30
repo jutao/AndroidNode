@@ -38,7 +38,7 @@ Demo 如下：
       }
     }
 
-#增加打折功能后的收银软件 #
+# 增加打折功能后的收银软件
 可是如果商场搞促销，需要打折该怎么办，不可能每次都要修改代码然后重新安装，用下拉框可能会比较方便。
 Demo 如下：
 
@@ -85,10 +85,10 @@ MainActivity 改动如下
 
 		public class CashContext {
 		  private CashSuper cs;
-		
+
 		  public CashContext(CashSuper cs) {
 		    this.cs = cs;
-		
+
 		  }
 		  public double GetResule(double money){
 		    return cs.acceptCash(money);
@@ -115,11 +115,11 @@ MainActivity 改动如下
             break;
         }
         totalPrice = cc.GetResule(totalPrice);
-		
+
 
 这时候，你会发现，我们又像原来一样在 MainActivity 中写了判断，可以试着将之前的工厂模式和策略模式结合吗？
 
-##策略模式与简单工厂结合##
+## 策略模式与简单工厂结合##
 将 CashContext 类的构造方法修改如下：
 
 		public CashContext(int type) {

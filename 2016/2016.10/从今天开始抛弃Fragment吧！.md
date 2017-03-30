@@ -1,10 +1,11 @@
+
 Square：从今天开始抛弃Fragment吧！
 ---
 
 > * 原文链接 : [Advocating Against Android Fragments](https://corner.squareup.com/2014/10/advocating-against-android-fragments.html)
 * 原文作者 : [Pierre-Yves Ricau](http://twitter.com/Piwai)
 * [译文出自 :  开发技术前线 www.devtf.cn](http://www.devtf.cn)
-* 译者 : [chaossss](https://github.com/chaossss) 
+* 译者 : [chaossss](https://github.com/chaossss)
 * 校对者: [Belial](www.belial.me)
 * 状态 :  完成
 
@@ -26,7 +27,7 @@ Square：从今天开始抛弃Fragment吧！
 
 #关于 Fragment 你不知道的事
 
-##The lolcycle
+##  The lolcycle
 
 在 Android 中，Context 就像一个[上帝对象](http://en.wikipedia.org/wiki/God_object)，因为在 Context 类中涵盖了太多 Android 系统的信息和相关的操作，使得 Context 在 Android 系统中相当于一个全知全能的上帝，而 Activity 就是为 Context 添加了生命周期的子类。不过让上帝具有生命周期还是有些讽刺的。虽然 Fragment 不是上帝对象，但 Fragment 为了能够完成 Activity 中能完成的各种操作，使 Fragment 自身的生命周期变得异常复杂。
 
@@ -38,7 +39,7 @@ Steve Pomeroy 做了一张[ Fragment 的完整生命周期图](https://github.co
 
 整个 Fragment 的生命周期让你很头疼要怎样使用这些回调方法，它们是同步调用的呢，还是只是一次性全部调用呢，还是其它情况……？
 
-##难于调试
+##  难于调试
 
 当你的应用出现 Bug，你得用调试工具一步一步地执行代码才能知道到底发生了什么，虽说一般情况下这样做 Bug 都能解决，但如果你在调试的时候发现 Bug 和 FragmentManagerImpl 类存在某种联系，那么我可要好好恭喜你即将中大奖了！
 
@@ -79,15 +80,15 @@ Steve Pomeroy 做了一张[ Fragment 的完整生命周期图](https://github.co
 
 在多年的深度分析中我得出结论：操蛋程度/调试耗费的时间 = 2^m，m 为 Fragment 的个数。
 
-##Fragment 是视图控制器？想太多
+##   Fragment 是视图控制器？想太多
 
 因为 Fragment 需要创建、绑定和配置 View，它们包含了许多与 View 关联的结点，这就意味着 View 类代码中的业务逻辑并没有真正地被解耦，正是这个原因使得我们要为 Fragment 实现测试单元将会变得很困难。
 
-##Fragment transactions
+##   Fragment transactions
 
 Fragment 的 transaction 允许你执行一系列的 Fragment 操作，但不幸的是，提交 transaction 是异步操作，并且在 UI 线程的 Handler 队列的队尾被提交。这会在接收多个点击事件或配置发生改变时让你的 App 处在未知的状态。
 
-	
+
 	class BackStackRecord extends FragmentTransaction {
 	    int commitInternal(boolean allowStateLoss) {
 	        if (mCommitted)
@@ -104,7 +105,7 @@ Fragment 的 transaction 允许你执行一系列的 Fragment 操作，但不幸
 	}
 
 
-##创建 Fragment 可能带来的问题
+##    创建 Fragment 可能带来的问题
 
 Fragment 的实例能够通过 Fragment Manager 创建，例如下面的代码看起来没有什么问题：
 
@@ -124,7 +125,7 @@ Fragment 的实例能够通过 Fragment Manager 创建，例如下面的代码�
 	    constructor that is public
 
 
-##Fragment 教给我们的思想
+##   Fragment 教给我们的思想
 
 尽管 Fragment 有着上面提到的缺点，但也是 Fragment 教给我们许多代码架构的思想：
 
@@ -136,7 +137,7 @@ Fragment 的实例能够通过 Fragment Manager 创建，例如下面的代码�
 
 #响应式 UI：Fragment VS Custom View
 
-##Fragment
+##  Fragment
 
 我们不妨先来看看一个 Fragment 的[范例](http://developer.android.com/shareables/training/FragmentBasics.zip)，界面中显示了一个 list。
 
@@ -145,11 +146,11 @@ HeadlinesFragment 就是显示 List 的简单 Fragment：
 
 	public class HeadlinesFragment extends ListFragment {
 	  OnHeadlineSelectedListener mCallback;
-	
+
 	  public interface OnHeadlineSelectedListener {
 	    void onArticleSelected(int position);
 	  }
-	
+
 	  @Override
 	  public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -158,13 +159,13 @@ HeadlinesFragment 就是显示 List 的简单 Fragment：
 	            R.layout.fragment_list,
 	            Ipsum.Headlines));
 	  }
-	
+
 	  @Override
 	  public void onAttach(Activity activity) {
 	    super.onAttach(activity);
 	    mCallback = (OnHeadlineSelectedListener) activity;
 	  }
-	
+
 	  @Override
 	  public void onListItemClick(ListView l, View v, int position, long id) {
 	    mCallback.onArticleSelected(position);
@@ -215,7 +216,7 @@ HeadlinesFragment 就是显示 List 的简单 Fragment：
 	}
 
 
-##自定义 View
+##  自定义 View
 
 我们不妨重新实现一个简化版的只使用了 View 的代码
 
@@ -224,7 +225,7 @@ HeadlinesFragment 就是显示 List 的简单 Fragment：
 
 	public interface Container {
 	  void showItem(String item);
-	
+
 	  boolean onBackPressed();
 	}
 
@@ -234,17 +235,17 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 
 	public class MainActivity extends Activity {
 	  private Container container;
-	
+
 	  @Override protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.main_activity);
 	    container = (Container) findViewById(R.id.container);
 	  }
-	
+
 	  public Container getContainer() {
 	    return container;
 	  }
-	
+
 	  @Override public void onBackPressed() {
 	    boolean handled = container.onBackPressed();
 	    if (!handled) {
@@ -261,7 +262,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	  public ItemListView(Context context, AttributeSet attrs) {
 	    super(context, attrs);
 	  }
-	
+
 	  @Override protected void onFinishInflate() {
 	    super.onFinishInflate();
 	    final MyListAdapter adapter = new MyListAdapter();
@@ -280,9 +281,9 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 
 
 这样做的好处是：能够基于资源文件夹在不同的 XML 布局文件
-	
+
 	`res/layout/main_activity.xml`
-	
+
 	```xml
 	<com.squareup.view.SinglePaneContainer
 	    xmlns:android="http://schemas.android.com/apk/res/android"
@@ -296,7 +297,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	      />
 	</com.squareup.view.SinglePaneContainer>
 	```
-	
+
 	`res/layout-land/main_activity.xml`
 
 ```xml
@@ -324,20 +325,20 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 
 	public class DualPaneContainer extends LinearLayout implements Container {
 	  private MyDetailView detailView;
-	
+
 	  public DualPaneContainer(Context context, AttributeSet attrs) {
 	    super(context, attrs);
 	  }
-	
+
 	  @Override protected void onFinishInflate() {
 	    super.onFinishInflate();
 	    detailView = (MyDetailView) getChildAt(1);
 	  }
-	
+
 	  public boolean onBackPressed() {
 	    return false;
 	  }
-	
+
 	  @Override public void showItem(String item) {
 	    detailView.setItem(item);
 	  }
@@ -347,16 +348,16 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 
 	public class SinglePaneContainer extends FrameLayout implements Container {
 	  private ItemListView listView;
-	
+
 	  public SinglePaneContainer(Context context, AttributeSet attrs) {
 	    super(context, attrs);
 	  }
-	
+
 	  @Override protected void onFinishInflate() {
 	    super.onFinishInflate();
 	    listView = (ItemListView) getChildAt(0);
 	  }
-	
+
 	  public boolean onBackPressed() {
 	    if (!listViewAttached()) {
 	      removeViewAt(0);
@@ -365,7 +366,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	    }
 	    return false;
 	  }
-	
+
 	  @Override public void showItem(String item) {
 	    if (listViewAttached()) {
 	      removeViewAt(0);
@@ -374,7 +375,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	    MyDetailView detailView = (MyDetailView) getChildAt(0);
 	    detailView.setItem(item);
 	  }
-	
+
 	  private boolean listViewAttached() {
 	    return listView.getParent() != null;
 	  }
@@ -383,7 +384,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 
 不难想象：将容器类抽象，并用这种的方式开发 App，不但不需要 Fragment，还能架构出容易理解的代码。
 
-##View 和 Presenter
+##  View 和 Presenter
 
 自定义 View 在应用中非常有用，但我们希望将业务逻辑从 View 中剥离，转交给特定的控制器处理，也就是接下来我们所说的 Presenter，引入 Presenter 能提高代码的可读性和可测试性。如果你不信的话，不妨看看重构后的 MyDetailView：
 
@@ -391,12 +392,12 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	public class MyDetailView extends LinearLayout {
 	  TextView textView;
 	  DetailPresenter presenter;
-	
+
 	  public MyDetailView(Context context, AttributeSet attrs) {
 	    super(context, attrs);
 	    presenter = new DetailPresenter();
 	  }
-	
+
 	  @Override protected void onFinishInflate() {
 	    super.onFinishInflate();
 	    presenter.setView(this);
@@ -407,7 +408,7 @@ Acitivity 将假设始终存在容器，并且几乎不会将业务交给容器�
 	      }
 	    });
 	  }
-	
+
 	  public void setItem(String item) {
 	    textView.setText(item);
 	  }
@@ -450,11 +451,11 @@ Presenter 将在更高层级中操控 View：
 	  assertThat(isSavingInBackground()).isFalse();
 
 
-##回退栈管理
+##  回退栈管理
 
 通过异步处理来管理回退栈实在是牛刀杀鸡，大材小用了……我们只需要用一个超轻量级库——Flow，就可以达到目的。有关 Flow 的介绍 Ray Ryan 已经写过博客了，我就不在此赘述啦。
 
-##我把 UI 相关的代码全都写在 Fragment 里了咋办呀，在线等，急！！！
+##  我把 UI 相关的代码全都写在 Fragment 里了咋办呀，在线等，急！！！
 
 别理你的 Fragment，你就一点一点地把 View 相关的代码移到自定义 View 里，然后把涉及到的业务逻辑交给能够与 View 进行交互的 Presenter，然后你就会发现 Fragment 沦为空壳，只有一些初始化自定义 View 和连接 View 和 Presenter 的操作：
 
@@ -471,7 +472,7 @@ Presenter 将在更高层级中操控 View：
 
 抛弃 Fragment 确实得花很大的功夫，但我们已经做到了，感谢[ Dimitris Koutsogiorgas ](https://twitter.com/dnkoutso)和[ Ray Ryan ](https://twitter.com/rjrjr)的伟大贡献！
 
-##Dagger 和 Mortar 是什么？
+##  Dagger 和 Mortar 是什么？
 
 Dagger & Mortar 与 Fragment 成正交关系，换句话说，两者间各自的变化不会影响对方，使用 Dagger & Mortar 既可以用 Fragment，也可以不用 Fragment。
 
@@ -483,7 +484,7 @@ Dagger & Mortar 与 Fragment 成正交关系，换句话说，两者间各自的
 
 - Mortar 为你管理 Dagger 的子图，并帮你将它们与 Activity 的生命周期关联在一起，这种功能让你能有效地实现“域”：当一个 View 被添加进来，它的 Presenter 和依赖都会作为子图被创建；当 View 被移除，你能轻易地销毁“域”，并让垃圾回收机制去完成它的工作。
 
-##结论
+##  结论
 
 我们曾为 Fragment 的诞生满心欢喜，幻想着 Fragment 能为我们带来种种便利，然而这一切不过是场虚空大梦，我们最后发现骑着白马的 Fragment 既不是王子也不是唐僧，只不过是人品爆发捡了只白马的乞丐罢了：
 
